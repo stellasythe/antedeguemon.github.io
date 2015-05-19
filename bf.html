@@ -1,134 +1,150 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+<head>
+    <title>Vicente's Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css">
+    <script src="https://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <body>
-<h1>Brainfuck</h1>
-<ul>
-		<li><a href="#zerar">Zerar célula</a></li>
-		<li><a href="#copiar">Copiar a[n] para a[n+1] usando a[n+2] como célula temporária</a></li>
-		<li><a href="#avancar">Avançar para próxima celular diferente de zero</a></li>
-		<li><a href="#adicao">Adição de a[n] em a[n+1]</a></li>
-		<li><a href="#subtracao">Subtração de a[n] em a[n-1]</a></li>
-		<li><a href="#divisao">Divisão</a></li>
-		<li><a href="#divisaon">Divisão de a[n+1] por a[n]</a></li>
-</ul>
-
-<hr>
-<center><h2>Códigos</h2></center>
-
-<h3 name="zerar">Zerar célula</h3>
-<pre>[-]</pre>
-<p>Enquanto o valor de a[0] for maior que zero, diminui 1 de a[0].</p>
-<pre>
-a = 10
-while (True):
-	a = a-1
-	if a == 0:
-		break
-</pre>
-<hr id="copiar">
-<h3>Copiar a[n] para a[n+1] usando a[n+2] como célula temporária</h3>
-<pre>[->+>+<<]>>[-<<+>>]</pre>
-<p>Enquanto o valor de a[n] for maior que zero, diminui 1 de a[n] e adiciona 1 em a[n+1] e a[n+2].<br>Depois, move o ponteiro para a[n+2] e, enquanto a[n+2] for diferente de zero, adiciona 1 em a[n] e remove 1 de a[n+2].</p>
-
-<hr id="avancar">
-<h3>Avançar para próxima célula diferente de zero</h3>
-<pre>[>]</pre>
-<hr id="adicao">
-<h3>Adição de a[n] em a[n+1]</h3>
-<p>Adiciona o valor de a[0] em a[1]</p>
-<pre>[->+<]</pre>
-<p>Enquanto a[0] for maior que zero, diminui 1 de a[0] e adiciona um em a[1].
-<pre>
-a = 10
-b = 2
-while (True):
-	a = a - 1
-	if a == 0:
-		break
-	b = b + 1
-</pre></p>
-<hr id="subtracao">
-<h3>Subtração de a[n] em a[n-1]</h3>
-<p>Subtrai valor de a[0] em a[1]</p>
-<pre>[->-<]</pre>
-<p>Enquanto a[0] for maior que zero, diminui 1 de a[0] e 1 de a[1].<br>
-Se a[0] for maior que a[1], o loop continuará mesmo depois de a[1] ter atingido o valor 0. Ao atingir 0-1, o valor de a[1] passará a ser 255, devido a não existência de valores negativos em bf.<br>Ou seja: <code>a[0] > a[1], a[1] = 255-(a[0]-a[1])</code>.</p>
-<pre>
-a = 1
-b = 2
-while (True):
-	a = a - 1
-	if a == 0:
-		break
-	b = b - 1
-</pre>
-<hr id="divisao">
-<h3>Divisão</h3>
-<p>Divide a[0] por um divisor pré-definido. No exemplo, é realizada a operação <code>4/2</code></p>
-<pre>
-	++++
-	[
-		-->+<
-	]
-</pre>
-<p>Em execução:</p>
-<pre>
-	++++		adiciona 4 a a[0], que é o dividendo
-	[		começa um loop, enquanto a[0] for diferente de 0
-		--	diminui 2 de a[0], sendo 2 o divisor
-		>+	pula para a[1], que é a célula do resultado da divisão, e soma 1
-		<	volta para a célula do contador de loop, a[0]
-	]
-
-</pre>
-<p>Ao terminar a execução, a fita será: 0 2 </p>
-<pre>
-a = 4
-b = 0
-while True:
-	a = a - 2
-	b = b + 1
-	if a == 0:
-		break
-</pre>
-<hr id="divisaon">
-<h3>Divisão de a[n+1] por a[n]</h3>
-<p>Usando a[n] como divisor e a[n+1] como dividendo, realiza a operação e coloca o resultado em a[n+2], usando a[n+3] como célula temporária para alocação do divisor.</p>
-<pre>
-+++>
-++++++++++++
-[
-	<
-	[
-		->->>+<<<
-	]
-	>>+>
-	[
-		-<<<+>>>
-	]
-	<<
-]
-</pre>
-<p>Em execução:</p>
-<pre>
-+++> 			adiciona 3 a a[0] e move o ponteiro para a[1]
-++++++++++++ 		adiciona 12 em a[1]
-[ 			inicia o loop, até a[1] ser 0
-	< 		move o ponteiro para a[0], que é a célula do divisor
-	[ 		loop em a[0], até a[0] ser 0, ou seja, até subtrair do dividendo o divisor
-		-> 	diminui 1 de a[0] e passa para a[1]
-		->> 	diminui 1 de a[1] e passa para a[3]
-		+ 	adiciona 1 em a[3], que é a célula de divisor temporária, porque a atual se tornará 0 no final do loop
-		<<< 	passa o ponteiro para a célula do loop
-	]
-	>>+		move ponteiro para a[2], a célula do resultado, adiciona 1
-	>		move ponteiro para a[3], a célula do divisor temporário e move o conteúdo dela para a[0], célula do divisor
-	[
-		-<<<+>>>
-	]
-	<<
-]
-</pre>
-<hr>
+    <div data-role="page">
+ 
+        <div data-role="header">
+			<a href="index.html" rel="external">Back</a>
+            <h1>Brainfuck</h1>
+        </div> <!-- header -->
+ 
+        <div data-role="content">
+			<div data-role="collapsible-set" data-theme="c" data-content-theme="a" data-collapsed-icon="arrow-d" data-expanded-icon="arrow-u">
+				
+				<div data-role="collapsible">
+					   <h3>Copiar a[n] para a[n+1] usando a[n+2] como célula temporária</h3>
+					   <pre>[->+>+<<]>>[-<<+>>]</pre>
+					   <p>Enquanto o valor de a[n] for maior que zero, diminui 1 de a[n] e adiciona 1 em a[n+1] e a[n+2]. <br>
+					   Depois, move o ponteiro para a[n+2] e, enquanto a[n+2] for diferente de zero, adiciona 1 em a[n] e remove 1 de a[n+2].</p>
+				</div>
+					
+				<div data-role="collapsible">
+						<h3>Avançar para próxima celular diferente de zero</h3>
+				</div>
+					
+				<div data-role="collapsible">
+						<h3>Adição de a[n] em a[n+1]</h3>
+						<p>Adiciona o valor de a[0] em a[1]</p>
+						<pre>[->+<]</pre>
+						<p> Enquanto a[0] for maior que zero, diminui 1 de a[0] e adiciona um em a[1].</p>
+						<pre>
+						a = 10
+						b = 2
+						while (True):
+							a = a - 1
+							if a == 0:
+								break
+							b = b + 1
+						</pre>
+				</div>
+					
+				<div data-role="collapsible">
+						<h3>Subtração de a[n] em a[n-1]</h3>
+						<p>Subtrai valor de a[0] em a[1]</p>
+						<pre>[->-<]</pre>
+						<p> Enquanto a[0] for maior que zero, diminui 1 de a[0] e 1 de a[1]. <br> Se a[0] for maior que a[1], o loop continuará mesmo depois de a[1] ter atingido o valor 0. Ao atingir 0-1, o valor de a[1] passará a ser 255, devido a não existência de valores negativos em bf. <br>
+						Ou seja: </p>
+						<pre>
+						a[0] > a[1], a[1] = 255-(a[0]-a[1]).
+						a = 1
+						b = 2
+						while (True):
+							a = a - 1
+							if a == 0:
+								break
+							b = b - 1
+						</pre>
+				</div>
+					
+				<div data-role="collapsible">
+						<h3>Divisão</h3>
+						<p>Divide a[0] por um divisor pré-definido. No exemplo, é realizada a operação 4/2</p>
+						<pre>
+						++++
+						[
+								-->+<
+						]
+						</pre>
+						
+						<p> Em execução: </p>
+						<pre>
+						++++    adiciona 4 a a[0], que é o dividendo
+						[		começa um loop, enquanto a[0] for diferente de 0
+							--	diminui 2 de a[0], sendo 2 o divisor
+							>+	pula para a[1], que é a célula do resultado da divisão, e soma 1
+							<	volta para a célula do contador de loop, a[0]
+						]
+						</pre>
+						
+						<p> Ao terminar a execução, a fita será 0 2 </p>
+						<pre>
+						a = 4
+						b = 0
+						while True:
+							a = a - 2
+							b = b + 1
+							if a == 0:
+								break
+						<pre>
+				</div>
+				
+				<div data-role="collapsible">
+						<h3>Divisão de a[n+1] por a[n]</h3>
+						<p>Usando a[n] como divisor e a[n+1] como dividendo, realiza a operação e coloca o resultado em a[n+2], usando a[n+3] como célula temporária para alocação do divisor.</p>
+						<pre>
+						+++>
+						++++++++++++
+						[
+							<
+							[
+								->->>+<<<
+							]
+							>>+>
+							[
+								-<<<+>>>
+							]
+							<<
+						]
+						</pre>
+						
+						<p>Em execução: </p>
+						<pre>
+						+++> 			adiciona 3 a a[0] e move o ponteiro para a[1]
+						++++++++++++ 		adiciona 12 em a[1]
+						[ 			inicia o loop, até a[1] ser 0
+								< 		move o ponteiro para a[0], que é a célula do divisor
+								[ 		loop em a[0], até a[0] ser 0, ou seja, até subtrair do dividendo o divisor
+									-> 	diminui 1 de a[0] e passa para a[1]
+									->> 	diminui 1 de a[1] e passa para a[3]
+									+ 	adiciona 1 em a[3], que é a célula de divisor temporária, porque a atual se tornará 0 no final do loop
+									<<< 	passa o ponteiro para a célula do loop
+								]
+								>>+		move ponteiro para a[2], a célula do resultado, adiciona 1
+								>		move ponteiro para a[3], a célula do divisor temporário e move o conteúdo dela para a[0], célula do divisor
+								[
+									-<<<+>>>
+								]
+								<<
+						]
+						</pre>
+				</div>
+			
+			</div>
+			
+        </div> <!-- /content -->
+ 
+        <div data-role="footer">
+            <h4>Version 0.7</h4>
+        </div> <!-- /footer -->
+ 
+    </div> <!-- /page -->
 </body>
 </html>
